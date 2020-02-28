@@ -21,10 +21,15 @@ Describe $file.BaseName -Tags Unit {
             $null = $DataCollectorSet.Commit("unit",$null,0x0003);
         }
 
-        It "Output is a ComObject" {
+        It "Positive Output is a ComObject" {
             $result = Get-DataCollectorSet "unit"
             $result | Should -Not -BeNullOrEmpty
             $result.GetType().Name | Should -Be "__ComObject"
+        }
+
+        It "Negative Output is a Null" {
+            $result = Get-DataCollectorSet "unitTest" -Verbose
+            $result | Should -Be $false
         }
 
         AfterAll {

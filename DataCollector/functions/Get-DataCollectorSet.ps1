@@ -24,12 +24,13 @@
             $DataCollectorSet.Query($Name,$ServerName)
         }
         Catch [System.Exception] {
+            Write-Verbose "ErrorCode: $("{0:X4}" -f $($PSItem[0].Exception.ErrorCode) )"
             if ( 80300002 -eq $("{0:X4}" -f $($PSItem[0].Exception.ErrorCode) ) ) {
                 $DataCollectorSet = $false;
                 Return
             }
 
-            Write-Information  "Error at line: $(($PSItem[0].InvocationInfo.line).Trim())"
+            Write-Information "Error at line: $(($PSItem[0].InvocationInfo.line).Trim())"
             $PSCmdlet.ThrowTerminatingError($PSItem)
         }
     }
