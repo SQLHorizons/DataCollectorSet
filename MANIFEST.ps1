@@ -1,7 +1,3 @@
-# DataCollectorSet
-
-```powershell
-
 Push-Location .\DataCollector;
 
 $manifest = @{
@@ -18,5 +14,3 @@ $manifest = @{
 }
 New-ModuleManifest @manifest;
 Pop-Location;
-
-```
