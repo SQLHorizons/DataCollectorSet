@@ -1,4 +1,6 @@
 ﻿function Get-DataCollectorSet {
+    #Requires -RunAsAdministrator
+
     [CmdletBinding()]
     [OutputType([__ComObject])]
     param (
@@ -23,19 +25,21 @@
             ##  query for data collector set.
             $DataCollectorSet.Query($Name,$ServerName)
         }
-        Catch [System.Runtime.InteropServices.COMException] {
+        Catch [System.Runtime.InteropServices.COMException],[System.Object] {
             $DataCollectorSet = $false;
             Return
         }
-        Catch [System.Exception] {
+        Catch {
+            Write-Debug $( $PSItem[0].Exception.GetType().FullName, $PSItem[0].Exception.Message )
+
             Write-Information "Error at line: $(($PSItem[0].InvocationInfo.line).Trim())"
             $PSCmdlet.ThrowTerminatingError($PSItem)
         }
     }
     End {
         ##  resetting execution attributes.
-        $InformationPreference = "SilentlyContinue"
+        $InformationPreference = "SilentlyContinue";
 
-        Return $DataCollectorSet
+        Return $DataCollectorSet;
     }
 }

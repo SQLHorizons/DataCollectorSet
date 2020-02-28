@@ -1,7 +1,10 @@
-﻿#Requires -Modules Pester
-$here = Split-Path -Parent $MyInvocation.MyCommand.Path
-$sut = (Split-Path -Leaf $MyInvocation.MyCommand.Path).Replace(".Tests.", ".")
-$file = Get-ChildItem "$here\$sut"
+﻿#Requires -RunAsAdministrator
+#Requires -Modules Pester
+
+$here   = Split-Path -Parent $MyInvocation.MyCommand.Path
+$sut    = (Split-Path -Leaf $MyInvocation.MyCommand.Path).Replace(".Tests.", ".")
+$file   = Get-ChildItem "$here\$sut"
+$module = Get-ChildItem $( Split-Path -Parent $here ) -Filter "*.psm1"
 
 Describe $file.BaseName -Tags Unit {
 
@@ -16,7 +19,7 @@ Describe $file.BaseName -Tags Unit {
     Context "Basic features" {
 
         BeforeAll {
-            . $file
+            Import-Module $module -Force;
             $DataCollectorSet = New-Object -ComObject Pla.DataCollectorSet -Strict;
             $null = $DataCollectorSet.Commit("unit",$null,0x0003);
         }
@@ -27,8 +30,8 @@ Describe $file.BaseName -Tags Unit {
             $result.GetType().Name | Should -Be "__ComObject"
         }
 
-        It "Negative Output is a Null" {
-            $result = Get-DataCollectorSet "unitTest" -Verbose
+        It "Negative Output is a False" {
+            $result = Get-DataCollectorSet "unitTest"
             $result | Should -Be $false
         }
 

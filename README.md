@@ -1,5 +1,9 @@
 # DataCollectorSet
 
+## Manifest
+
+Create module manifest:
+
 ```powershell
 
 Push-Location .\DataCollector;
@@ -18,5 +22,30 @@ $manifest = @{
 }
 New-ModuleManifest @manifest;
 Pop-Location;
+
+```
+
+## Module
+
+Load 'DataCollector' module:
+
+```powershell
+
+Push-Location "D:\.source\repos\DataCollectorSet\DataCollector"
+Import-Module .\DataCollector.psm1 -Force
+
+##  Positive test.
+$DataCollectorSet = Get-DataCollectorSet test
+##  Negative test.
+$DataCollectorSet = Get-DataCollectorSet unit
+
+if ( $DataCollectorSet -eq $false ) {
+    New-DataCollectorSet unit
+}
+
+$DataCollectors = New-DataCollector
+
+$DataCollectorSet.DataCollectors.Add($DataCollectors)
+$DataCollectorSet.Commit("test",$null,0x0003) | Out-Null;
 
 ```
