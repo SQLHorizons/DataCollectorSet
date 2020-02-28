@@ -17,13 +17,20 @@ Describe $file.BaseName -Tags Unit {
 
         BeforeAll {
             . $file
+            $DataCollectorSet = New-Object -ComObject Pla.DataCollectorSet -Strict;
+            $null = $DataCollectorSet.Commit("unit",$null,0x0003);
         }
 
         It "Output is a ComObject" {
-            $result = Get-DataCollectorSet "test"
+            $result = Get-DataCollectorSet "unit"
             $result | Should -Not -BeNullOrEmpty
             $result.GetType().Name | Should -Be "__ComObject"
         }
+
+        AfterAll {
+            $null = $DataCollectorSet.Delete();
+        }
+
     }
 
 }

@@ -1,6 +1,6 @@
 ﻿function Get-DataCollectorSet {
     [CmdletBinding()]
-    [OutputType([System.MarshalByRefObject])]
+    [OutputType([__ComObject])]
     param (
         [Parameter(Mandatory = $true)]
         [ValidateNotNullOrEmpty()]
